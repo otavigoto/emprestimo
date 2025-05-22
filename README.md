@@ -1,103 +1,129 @@
-📚 Sistema de Gerenciamento de Biblioteca em C
-  Este projeto é um sistema de gerenciamento de biblioteca desenvolvido em linguagem C, com o objetivo de cadastrar, emprestar, devolver, consultar e remover livros através de um menu interativo   no terminal.
+# Sistema de Gerenciamento de Biblioteca (C - Estruturas e Ponteiros)
 
-✨ Funcionalidades
-  O sistema oferece as seguintes funcionalidades:
+Este projeto implementa um **sistema de gerenciamento de biblioteca** em linguagem C, utilizando **listas encadeadas, structs e ponteiros**. O programa é executado em ambiente de terminal e permite realizar operações como cadastro, consulta, empréstimo, devolução e remoção de livros.
 
-✅ Cadastro de Livros
-  Permite cadastrar novos livros com as seguintes informações:
+---
 
-  -Título
+## 📚 Funcionalidades Principais
 
-  -Autor
+### 1. Cadastro de Livros
 
-  -Número de páginas
+* Permite adicionar livros com os seguintes dados:
 
-  -Ano de publicação
+  * Título
+  * Autor
+  * Número de páginas
+  * Ano de publicação
+  * Estoque (inicialmente 1)
+  * ID único (gerado automaticamente)
+* Se um livro com o mesmo título já estiver cadastrado, o sistema apenas incrementa o estoque, sem criar um novo cadastro.
 
-  -Código único (ID)
+### 2. Consulta de Livros
 
-  -Estoque disponível
+* **Listagem completa** de todos os livros cadastrados.
+* **Busca por ID** para localizar um livro específico.
+* Mostra os dados completos e a lista de pessoas que estão com o livro emprestado.
 
-  -Lista com os nomes das pessoas que pegaram o livro emprestado
+### 3. Empréstimo de Livros
 
-  **Caso o título do livro já exista no sistema, o estoque é incrementado automaticamente sem duplicar o cadastro.**
+* Permite emprestar um livro para um usuário pelo seu nome.
+* Verifica se o livro está com estoque > 0.
+* Atualiza a lista de emprestimos e decrementa o estoque.
+* Impede o mesmo usuário de emprestar o mesmo livro mais de uma vez simultaneamente.
 
-🔎 Consulta de Livros
-  Possibilita consultar todos os livros cadastrados.
+### 4. Devolução de Livros
 
-  Permite buscar um livro específico pelo seu ID.
+* Permite devolver um livro informando o ID e o nome do usuário.
+* Remove o nome da lista de empréstimos.
+* Incrementa o estoque.
 
-  Exibe informações completas do livro, incluindo:
+### 5. Remoção de Livros
 
-  Detalhes técnicos
+* Remove um livro do sistema informando o ID.
+* Somente é permitido remover livros que **não estão emprestados**.
 
-  Estoque atual
+### 6. Menu Interativo
 
-  Lista de pessoas que emprestaram o livro
+* Interface de terminal clara e simples para navegar entre:
 
-  Emite aviso se o livro não for encontrado.
+  * Cadastro
+  * Consulta
+  * Empréstimo
+  * Devolução
+  * Remoção
+  * Saída do sistema
 
-📤 Empréstimo de Livros
-  Permite que um usuário empreste um livro pelo seu ID.
+---
 
-  Verifica se o usuário já pegou o livro emprestado antes.
+## ⚡ Estrutura de Dados
 
-  Reduz a quantidade disponível no estoque.
+### Structs utilizadas:
 
-  **Caso o estoque esteja zerado, um aviso é emitido e o empréstimo é bloqueado.**
+```c
+// Representa uma pessoa que pegou um livro emprestado
+typedef struct emprestar_no {
+    char nome[50];
+    struct emprestar_no *prox;
+} emprestar;
 
-📥 Devolução de Livros
-  Permite que um usuário devolva um livro pelo seu ID.
+// Representa um livro
+typedef struct livro_no {
+    char titulo[30];
+    char autor[30];
+    int paginas;
+    char ano_publicacao[5];
+    int id;
+    int estoque;
+    struct emprestar_no *emprestar;
+    struct livro_no *prox;
+} livro;
 
-  Remove o nome do usuário da lista de empréstimo.
+// Representa a cabeça da lista de livros
+typedef struct head {
+    livro *head;
+} head;
+```
 
-  Aumenta a quantidade disponível no estoque.
+---
 
-  Emite aviso caso o nome informado não esteja na lista de empréstimo.
+## ⚖️ Requisitos
 
-❌ Remoção de Livros
-  Permite a exclusão de um livro pelo seu ID.
+* Compilador C (ex: `gcc`)
+* Sistema com terminal
 
-  **A remoção só será permitida se não houver nenhum exemplar emprestado.**
+### Compilar:
 
-🧭 Menu Interativo
-Sistema de navegação no terminal:
+```bash
+gcc -o biblioteca programa.c
+```
 
-  -Listar livros
+### Executar:
 
-  -Buscar livro por ID
+```bash
+./biblioteca
+```
 
-  -Adicionar livro
+---
 
-  -Realizar empréstimo ou devolução
+## ✅ Objetivos Atendidos
 
-  -Remover livro
+* [x] Cadastro de livros com controle de estoque
+* [x] Busca por ID
+* [x] Empréstimo e devolução com controle individual por nome
+* [x] Remoção segura de livros não emprestados
+* [x] Interface interativa no terminal
 
-  -Sair do sistema
+---
 
-🛠️ Como Executar
-  Compile o código com um compilador C (como gcc):
+## 🚀 Possíveis Melhorias Futuras
 
-  "gcc -o biblioteca main.c"
-Execute o programa:
+* Salvar e carregar os dados de um arquivo
+* Buscar por título (além de ID)
+* Melhorar validação de entrada do usuário
+* Implementar interface gráfica (GTK, ncurses, etc.)
 
-  "./biblioteca"
-**⚠️ Este código foi desenvolvido para ser executado em sistemas Linux. A função system("clear") pode não funcionar corretamente em outros sistemas operacionais. Para Windows, substitua por system("cls").**
+---
 
-🗃️ Estrutura de Dados
-  struct livro: Representa o livro com todas suas propriedades, incluindo a lista de pessoas que o pegaram emprestado.
+## 🎓 Autor
 
-  struct emprestar: Lista encadeada com os nomes dos usuários que realizaram empréstimos.
-
-  struct head: Representa o início da lista encadeada de livros.
-
-📌 Pontos de Atenção
-  O ID do livro é atribuído de forma incremental com base no último livro da lista.
-
-  As strings são lidas com fgets, que inclui o \n no final. Cuidado ao comparar strings.
-
-  O sistema ainda pode ser melhorado com persistência em arquivo e melhorias de validação de entrada.
-
-  📄 Licença
-  Este projeto é de livre uso para fins educacionais e de aprendizado.
+Este projeto foi desenvolvido com foco em exercitar conceitos de **estruturas de dados em C** (listas encadeadas e structs) e **alocação dinâmica de memória**.
