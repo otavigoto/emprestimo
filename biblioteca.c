@@ -46,16 +46,21 @@ void inserir_livro(head *h) {
     getchar();
     fgets(novo->ano_publicacao, 5, stdin);
 
+    int estoque;
+    printf("Quanto de estoque?\n");
+    scanf("%d", &estoque);
+
     novo->estoque = 1;
     novo->emprestar = NULL;
     novo->prox = NULL;
     novo->id = 0;
+    novo->estoque = estoque;
     int cont = 1;
 
     livro *aux = h->head;
     while (aux != NULL) {
         if (strcmp(aux->titulo, novo->titulo) == 0) {
-            aux->estoque += 1;
+            aux->estoque += estoque;
             free(novo);
             printf("Livro já existente. Estoque incrementado.\n");
             return;
