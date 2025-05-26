@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 typedef struct emprestar_no {
     char nome[50];
@@ -48,6 +49,8 @@ void inserir_livro(head *h) {
     novo->estoque = 1;
     novo->emprestar = NULL;
     novo->prox = NULL;
+    novo->id = 0;
+    int cont = 1;
 
     livro *aux = h->head;
     while (aux != NULL) {
@@ -59,8 +62,9 @@ void inserir_livro(head *h) {
         }
         if (aux->prox == NULL)
         {
-            novo->id = aux->id + 1;
+            novo->id = aux->id + cont;
         }
+        cont++;
         aux = aux->prox;
     }
 
@@ -227,7 +231,7 @@ void imprimir_lista(head *h) {
         printf("Titulo: %s", aux->titulo);
         printf("Autor: %s", aux->autor);
         printf("Paginas: %d\n", aux->paginas);
-        printf("Ano de Publicação: %s", aux->ano_publicacao);
+        printf("Ano de Publicação: %s \n", aux->ano_publicacao);
         printf("Estoque: %d\n", aux->estoque);
         printf("-----Empréstimos------\n");
         if (e == NULL) {
@@ -298,17 +302,16 @@ void buscar_por_id(head *h)
 
 void consultar(head *h) {
     system("clear");
+    if (h == NULL || h->head == NULL) {
+        printf("A lista está vazia\n");
+        return;
+    }
     printf("ESCOLHA UMA OPÇÃO\n");
     printf("0 - Voltar\n");
     printf("1 - Listar todos os livros\n");
     printf("2 - Buscar por ID\n");
     int escolha;
     scanf("%d", &escolha);
-
-    if (h == NULL || h->head == NULL) {
-        printf("A lista está vazia\n");
-        return;
-    }
 
     switch (escolha) {
         case 0:
@@ -355,12 +358,12 @@ void emprestimo(head *h)
 }
 
 int menu() {
-    system('clear');
+    system("clear");
     printf("ESCOLHA UMA OPÇÃO:\n");
     printf("0 - Sair\n");
     printf("1 - Visualizar livros\n");
     printf("2 - Adicionar Livro\n");
-    printf("3 - Emprestimo\n");
+    printf("3 - Empréstimo\n");
     printf("4 - Remover livro\n");
     int opt;
     scanf("%d", &opt);
@@ -389,6 +392,7 @@ void escolher(head *h, int opt) {
 }
 
 int main() {
+    setlocale(LC_ALL, "pt_BR");
     int opt;
     head *h = malloc(sizeof(head));
     h->head = NULL;
@@ -397,6 +401,7 @@ int main() {
         opt = menu();
         escolher(h, opt);
         printf("Pressione Enter para continuar...\n");
+        getchar();getchar();
     } while (opt != 0);
 
     return 0;
